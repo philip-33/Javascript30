@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Key Detection</title>
+  <script type="text/javascript" src="https://www.cornify.com/js/cornify.js"></script>
+</head>
+<body>
+<script>
+  const pressed = [];
+  const secretCode = 'batman';
+
+  window.addEventListener('keyup', (e) => {
+    console.log(e.key);
+    pressed.push(e.key);
+    //start searching at the *end* of the string of pressed keys
+    //also limit the length of the buffer being used to identify the code
+    //otherwise it's just a clunky keylogger...
+    pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length);
+    if (pressed.join('').includes(secretCode)) {
+      console.log('Hello, Bruce.');
+      //if the input matches the secretCode string, then throw up some unicorns.
+      cornify_add();
+    }
+    console.log(pressed);
+  });
+</script>
+</body>
+</html>
