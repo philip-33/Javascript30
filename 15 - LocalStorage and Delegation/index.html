@@ -28,7 +28,7 @@
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  const items = JSON.parse(localStorage.getItem('items')) || [];
 
   function addItem(e) {
     e.preventDefault();
@@ -40,6 +40,9 @@
     };
     items.push(item);
     populateList(items, itemsList);
+    //local storage is just text-based key-value pairs
+    //without 'stringify', this just stores the text [Object object]
+    localStorage.setItem('items', JSON.stringify(items));
     this.reset();
   }
 
@@ -59,10 +62,21 @@
     }).join('');
   }
 
+  function toggleDone(e) { // on done click...
+    if(!e.target.matches('input')) return; //skip unless input...
+    const el = e.target; // get the current target element sp we can...
+    const index = el.dataset.index; // save the position on the list...
+    items[index].done = !items[index].done; // and flag it as toggled
+    localStorage.setItem('items', JSON.stringify(items)); // then update localStorage
+    populateList(items, itemsList); // and finally update the list
+  }
+
   //when making forms, always listen for submit. 
   //Listening only for the button click will mean that the enter key doesn't work!
   addItems.addEventListener('submit', addItem);
+  itemsList.addEventListener('click', toggleDone);
 
+  populateList(items, itemsList);
 </script>
 
 
